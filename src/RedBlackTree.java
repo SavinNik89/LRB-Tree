@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class RedBlackTree {
     Node root;
 
@@ -32,8 +36,7 @@ public class RedBlackTree {
 
     public boolean insert (int value){
         if (root==null){
-            root = new Node();
-            root.value = value;
+            root = new Node(value);
             return true;
         } else {
             return  insert(root, value);
@@ -48,8 +51,8 @@ public class RedBlackTree {
                 if (node.rightChild != null){
                     return insert(node.rightChild, value);
                 } else {
-                    node.rightChild = new Node();
-                    node.rightChild.value = value;
+                    node.rightChild = new Node(value);
+                    rebalance(node.rightChild);
                     return true;
                 }
 
@@ -57,13 +60,15 @@ public class RedBlackTree {
                 if (node.leftChild != null){
                     return insert(node.leftChild, value);
                 } else {
-                    node.leftChild = new Node();
-                    node.leftChild.value = value;
+                    node.leftChild = new Node(value);
+                    rebalance(node.leftChild);
                     return true;
                 }
             }
         }
+    }
 
+    private void rebalance (Node node){
         if (isRed(node.rightChild) && !isRed(node.leftChild)){
             node = rotateLeft(node);
             swapColors(node, node.leftChild);
@@ -79,9 +84,8 @@ public class RedBlackTree {
             node.leftChild.color = false;
             node.rightChild.color = false;
         }
-        return true;
-
     }
+
 
     public boolean find (int value){
         return find (root, value);
@@ -118,3 +122,21 @@ class Node {
     }
 
 }
+
+class Main1 {
+    public static void main (String[] arg){
+        RedBlackTree tree = new RedBlackTree();
+        int [] values = new int[20];
+
+        for (int i =0; i<values.length; i++){
+            int random = (int) (Math.random()*100);
+            values[i] = random;
+        }
+        for (int i =0; i<values.length; i++){
+            tree.insert(values[i]);
+        }
+
+
+    }
+}
+
